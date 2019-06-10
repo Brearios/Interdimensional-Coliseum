@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Battle_Simulator_Exe
+namespace Interdimensiseum
 {
 
     class Program
@@ -12,22 +8,23 @@ namespace Battle_Simulator_Exe
         static void Main(string[] args)
         {
             string heroName;
-            int heroMaxHealth;
+            double heroMaxHealth;
             int heroDamage;
             int heroAtkSpd;
             int heroAtkRdy = 0;
             int heroMissChance = 3;
             int critRate = 10;
             int dodgeChance = 10;
+           
             string enemyName;
-            int enemyMaxHealth;
+            double enemyMaxHealth;
             int enemyDamage;
             int enemyAtkSpd;
             int enemyAtkRdy = 0;
             int enemyMissChance = 3;
-
+            
             // Welcome
-            Console.WriteLine("Welcome to the Interdimensiseum!");
+            Console.WriteLine("Welcome to the Interdimensional Coliseum!");
             // Define Hero
             Console.WriteLine(" Please enter the name of your hero: ");
             heroName = Console.ReadLine();
@@ -37,6 +34,9 @@ namespace Battle_Simulator_Exe
             heroDamage = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("With 1 being very slow, and 10 being very fast, how fast does " + heroName + " attack?");
             heroAtkSpd = Convert.ToInt32(Console.ReadLine());
+
+            double heroCurrHealth = heroMaxHealth;
+            
             // Define Enemy
             Console.WriteLine(" Please enter the name of your enemy: ");
             enemyName = Console.ReadLine();
@@ -47,8 +47,8 @@ namespace Battle_Simulator_Exe
             Console.WriteLine("With 1 being very slow, and 10 being very fast, how fast does " + enemyName + " attack?");
             enemyAtkSpd = Convert.ToInt32(Console.ReadLine());
 
-            int heroCurrHealth = heroMaxHealth;
-            int enemyCurrHealth = enemyMaxHealth;
+            double enemyCurrHealth = enemyMaxHealth;
+            
             Random rnd = new Random();
 
             while (heroCurrHealth > 0 && enemyCurrHealth > 0)
@@ -76,11 +76,12 @@ namespace Battle_Simulator_Exe
                     {
                         enemyCurrHealth -= heroDamage;
                         Console.WriteLine(heroName + " hits " + enemyName + " for " + heroDamage + ". " + enemyName + " has " + enemyCurrHealth + " remaining.");
-                        if (enemyCurrHealth <= 0)
-                        {
-                            Console.WriteLine(heroName + " has defeated " + enemyName);
-                            break;
-                        }
+                    }
+                    if (enemyCurrHealth <= 0)
+                    {
+                        double heroHealthRemaining = heroCurrHealth / heroMaxHealth * 100;
+                        Console.WriteLine(heroName + " has defeated " + enemyName + " with " + heroHealthRemaining + "% health remaining.");
+                        break;
                     }
                 }
                 enemyAtkRdy += enemyAtkSpd;
@@ -90,27 +91,28 @@ namespace Battle_Simulator_Exe
                     int enemyOutcome = rnd.Next(1, 100);
                     Console.WriteLine("(" + enemyName + " rolled " + enemyOutcome + ")");
                     if (enemyOutcome < enemyMissChance)
-					{
+                    {
                         Console.WriteLine(enemyName + " misses " + heroName);
                     }
-					else if (enemyOutcome < enemyMissChance + dodgeChance)
-					{
+                    else if (enemyOutcome < enemyMissChance + dodgeChance)
+                    {
                         Console.WriteLine(heroName + " dodged " + enemyName + "'s attack!");
                     }
                     else if (enemyOutcome < enemyMissChance + dodgeChance + critRate)
-                        {
-                            heroCurrHealth -= (enemyDamage * 2);
-                            Console.WriteLine("A critical strike! " + enemyName + " hits " + heroName + " for " + (enemyDamage * 2) + ". " + heroName + " has " + heroCurrHealth + " remaining.");
-                        }
-                        else
+                    {
+                        heroCurrHealth -= (enemyDamage * 2);
+                        Console.WriteLine("A critical strike! " + enemyName + " hits " + heroName + " for " + (enemyDamage * 2) + ". " + heroName + " has " + heroCurrHealth + " remaining.");
+                    }
+                    else
                     {
                         heroCurrHealth -= enemyDamage;
                         Console.WriteLine(enemyName + " hits " + heroName + " for " + enemyDamage + ". " + heroName + " has " + heroCurrHealth + " remaining.");
-                        if (heroCurrHealth <= 0)
-                        {
-                            Console.WriteLine(heroName + " has defeated " + enemyName);
-                            break;
-                        }
+                    }
+                    if (heroCurrHealth <= 0)
+                    {
+                        double enemyHealthRemaining = enemyCurrHealth / enemyMaxHealth * 100;
+                        Console.WriteLine(enemyName + " has defeated " + heroName + " with " + enemyHealthRemaining + "% health remaining.");
+                        break;
                     }
                 }
             }

@@ -1,6 +1,6 @@
 using System;
 
-namespace Interdimensiseum
+namespace InterdimensionalColiseum
 {
 
     class Program
